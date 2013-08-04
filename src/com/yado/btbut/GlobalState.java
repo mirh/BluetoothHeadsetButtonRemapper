@@ -4,13 +4,24 @@ import android.app.Application;
 
 public class GlobalState extends Application {
 
-	private int state;
+	private boolean remap;
 
-	public int getState() {
-		return state;
+	public boolean getRemap() {
+		return remap;
 	}
 
-	public void setState(int newState) {
-		this.state = newState;
+	public void setRemap(boolean newRemap) {
+		this.remap = newRemap;
+	}
+	
+	public void toggleRemap()
+	{
+		if (remap == false) {
+			remap = true;
+		}
+		else
+		{
+			remap = false;
+		}
 	}
 }

@@ -3,7 +3,6 @@ package com.yado.btbut;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-
 import android.os.Bundle;
 
 // http://developer.plantronics.com/blogs/Cary/2012/11/26/plugging-into-plantronics-headset-sensor-events-via-android
@@ -16,12 +15,16 @@ public class BtBut extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		/*
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (!mBluetoothAdapter.isEnabled()) {
 			mBluetoothAdapter.enable();
 		}
+		*/
 		startService(new Intent(this, BtButService.class));
+		
 		super.onCreate(savedInstanceState);
+		finish();
 	}
 
 	@Override

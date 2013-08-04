@@ -14,24 +14,24 @@ public class CallHandler extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 
 		GlobalState appState = ((GlobalState)context.getApplicationContext());
-		int btState = appState.getState();
-
-		if (btState == BluetoothProfile.STATE_CONNECTED) 
+		boolean remap = appState.getRemap();
+		
+		if (remap)
 		{
 			// play pause Smart AudioBook Player
 			Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);     
 			i.setPackage("ak.alizandro.smartaudiobookplayer");
-	
+
 			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 			context.sendBroadcast(i, null);
-	
+
 			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
 			context.sendBroadcast(i, null);
 			/*
 			Toast toast;
 			toast = Toast.makeText(context, "play/pause", Toast.LENGTH_SHORT);
 			toast.show();
-			*/
+			 */
 			// cancel the broadcast
 			setResultData(null);
 		}
