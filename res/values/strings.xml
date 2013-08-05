@@ -4,5 +4,7 @@
     <string name="app_name">BluetoothButton</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+	<string name="preference_file_key">BluetoothStatePreferenceFileKey</string>
+	<string name="preference_key">BluetoothState</string>
+	<item type="integer" name="mId">1423</item>
 </resources>

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
 public class RemapToggle extends Activity {
 	@Override
@@ -27,15 +26,14 @@ public class RemapToggle extends Activity {
 			notify = "Button remapping inactive";
 		}
 		
-		int mId = 1423;
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(this)
 		.setSmallIcon(R.drawable.ic_launcher)
 		.setContentTitle("Bluetooth Button")
 		.setContentText(notify);
-
+		
 		Intent resultIntent = new Intent(this, RemapToggle.class);
-
+		
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 		// Adds the back stack for the Intent (but not the Intent itself)
 		stackBuilder.addParentStack(RemapToggle.class);
@@ -51,7 +49,7 @@ public class RemapToggle extends Activity {
 		NotificationManager mNotificationManager =
 				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		// mId allows you to update the notification later on.
-		mNotificationManager.notify(mId, mBuilder.build());
+		mNotificationManager.notify(getResources().getInteger(R.integer.mId), mBuilder.build());
 		finish();
 	}
 }

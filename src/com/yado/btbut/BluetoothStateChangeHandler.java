@@ -23,8 +23,6 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 
 		GlobalState appState = ((GlobalState)context.getApplicationContext());
 		
-		int mId = 1423;
-		
 		if (currStatus == BluetoothProfile.STATE_CONNECTED)
 		{
 			// set remapping status to true
@@ -35,7 +33,7 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 					new NotificationCompat.Builder(context)
 			.setSmallIcon(R.drawable.ic_launcher)
 			.setContentTitle("Bluetooth Button")
-			.setContentText("Button remap active");
+			.setContentText("Button remapping active");
 
 			Intent resultIntent = new Intent(context, RemapToggle.class);
 
@@ -54,7 +52,7 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			NotificationManager mNotificationManager =
 					(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.
-			mNotificationManager.notify(mId, mBuilder.build());
+			mNotificationManager.notify(context.getResources().getInteger(R.integer.mId), mBuilder.build());
 		}
 
 		if (currStatus == BluetoothProfile.STATE_DISCONNECTED && prevStatus == BluetoothProfile.STATE_CONNECTED)
@@ -66,7 +64,7 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			NotificationManager mNotificationManager =
 					(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.
-			mNotificationManager.cancel(mId);
+			mNotificationManager.cancel(context.getResources().getInteger(R.integer.mId));
 
 			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();    
 			if (mBluetoothAdapter.isEnabled()) {
