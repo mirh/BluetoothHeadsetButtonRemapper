@@ -35,11 +35,11 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			.setContentTitle("Bluetooth Button")
 			.setContentText("Button remapping active");
 
-			Intent resultIntent = new Intent(context, RemapToggle.class);
+			Intent resultIntent = new Intent(context, RemapToggleActivity.class);
 
 			TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 			// Adds the back stack for the Intent (but not the Intent itself)
-			stackBuilder.addParentStack(BtBut.class);
+			stackBuilder.addParentStack(BtButActivity.class);
 			// Adds the Intent that starts the Activity to the top of the stack
 			stackBuilder.addNextIntent(resultIntent);
 			PendingIntent resultPendingIntent =

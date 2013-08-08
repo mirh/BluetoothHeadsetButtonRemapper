@@ -29,11 +29,11 @@ public class CallHandler extends BroadcastReceiver {
 			.setContentTitle("Bluetooth Button")
 			.setContentText("Button remapping active");
 
-			Intent resultIntent = new Intent(context, RemapToggle.class);
+			Intent resultIntent = new Intent(context, RemapToggleActivity.class);
 
 			TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 			// Adds the back stack for the Intent (but not the Intent itself)
-			stackBuilder.addParentStack(BtBut.class);
+			stackBuilder.addParentStack(BtButActivity.class);
 			// Adds the Intent that starts the Activity to the top of the stack
 			stackBuilder.addNextIntent(resultIntent);
 			PendingIntent resultPendingIntent =
@@ -48,15 +48,25 @@ public class CallHandler extends BroadcastReceiver {
 			// mId allows you to update the notification later on.
 			mNotificationManager.notify(context.getResources().getInteger(R.integer.mId), mBuilder.build());
 			
+			// http://stackoverflow.com/questions/3907062/action-media-button-does-not-work-on-real-device
+		
 			// play pause Smart AudioBook Player
-			Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);     
+			Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
 			i.setPackage("ak.alizandro.smartaudiobookplayer");
+			// i.setPackage("com.hyperionics.fbreader.plugin.tts_plus");
 
 			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-			context.sendBroadcast(i, null);
+			context.sendOrderedBroadcast(i, null);
 
 			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+			context.sendOrderedBroadcast(i, null);
+/*
+			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK));
 			context.sendBroadcast(i, null);
+
+			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
+			context.sendBroadcast(i, null);
+			
 			/*
 			Toast toast;
 			toast = Toast.makeText(context, "play/pause", Toast.LENGTH_SHORT);
