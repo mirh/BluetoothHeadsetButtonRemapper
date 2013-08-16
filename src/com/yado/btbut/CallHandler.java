@@ -4,12 +4,14 @@ package com.yado.btbut;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 
 public class CallHandler extends BroadcastReceiver {
 	@Override
@@ -61,6 +63,15 @@ public class CallHandler extends BroadcastReceiver {
 			 * context.sendBroadcast(i, null);
 			 */
 
+		    /* NEEDS to be started on real activity... try some other time
+		    // http://stackoverflow.com/questions/6756768/turn-off-screen-on-android
+		    // http://stackoverflow.com/questions/10687535/how-can-i-change-the-brightness-of-the-screen-in-broadcastreceiver
+		    WindowManager.LayoutParams params = ((Activity) context).getWindow().getAttributes();
+		    // params.flags |= LayoutParams.FLAG_KEEP_SCREEN_ON;
+		    params.screenBrightness = 0;
+		    ((Activity) context).getWindow().setAttributes(params);
+		    */
+			
 			/*
 			 * Toast toast; toast = Toast.makeText(context, "play/pause",
 			 * Toast.LENGTH_SHORT); toast.show();
