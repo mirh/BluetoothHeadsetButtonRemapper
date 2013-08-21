@@ -46,11 +46,38 @@ public class CallHandler extends BroadcastReceiver {
 			}
 
 			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
-					KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+					KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			context.sendBroadcast(i, null);
 
 			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP,
-					KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+					KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+			context.sendBroadcast(i, null);
+			
+			// play pause Smart AudioBook Player
+			i = new Intent(Intent.ACTION_MEDIA_BUTTON);
+			if (!packageToControl.equals("")) {
+				i.setPackage(packageToControl);
+			}
+
+			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
+					KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+			context.sendBroadcast(i, null);
+
+			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP,
+					KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+			context.sendBroadcast(i, null);
+			
+			i = new Intent(Intent.ACTION_MEDIA_BUTTON);
+			if (!packageToControl.equals("")) {
+				i.setPackage(packageToControl);
+			}
+
+			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
+					KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+			context.sendBroadcast(i, null);
+
+			i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP,
+					KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 			context.sendBroadcast(i, null);
 
 			/*
