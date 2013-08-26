@@ -1,8 +1,10 @@
 package com.yado.btbut;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 // http://developer.plantronics.com/blogs/Cary/2012/11/26/plugging-into-plantronics-headset-sensor-events-via-android
 // http://stackoverflow.com/questions/15872941/how-to-control-music-player-using-voice
