@@ -39,10 +39,11 @@ public class MainHandlerActivity extends Activity {
 				// http://stackoverflow.com/questions/3907062/action-media-button-does-not-work-on-real-device
 
 				// http://stackoverflow.com/questions/4212992/how-can-i-check-if-an-app-running-in-android
+				String packageToControl = "ak.alizandro.smartaudiobookplayer";
 				ActivityManager activityManager = (ActivityManager) getSystemService("activity");
 				List<RunningAppProcessInfo> pkgAppsList = activityManager
 						.getRunningAppProcesses();
-				String packageToControl = "ak.alizandro.smartaudiobookplayer";
+				/*
 				SmAuBPactive = false;
 				for (int i = 0; i < pkgAppsList.size(); i++) {
 					if (pkgAppsList.get(i).processName.equals(packageToControl)) {
@@ -51,7 +52,7 @@ public class MainHandlerActivity extends Activity {
 						}
 					}
 				}
-
+				 */
 				/*
 				 * for (int i = 0; i < pkgAppsList.size(); i++) { if
 				 * (pkgAppsList.get(i).processName.equals(
@@ -65,7 +66,7 @@ public class MainHandlerActivity extends Activity {
 					// start TTS service
 					// for now only tell time
 					Intent ServiceIntent = new Intent(this, TtsService.class);
-					ServiceIntent.putExtra("KEY1", "Value to be used by the service");
+					ServiceIntent.putExtra("todo", "time");
 					startService(ServiceIntent);
 				} else {
 					// 3xprevious Smart AudioBook Player

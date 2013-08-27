@@ -22,6 +22,12 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			// set remapping status to true
 			appState.setRemap(true);
 			appState.setBluetoothConnected(true);
+
+			// notify user over TTS
+			Intent ServiceIntent = new Intent(context, TtsService.class);
+			ServiceIntent.putExtra("todo", "startup");
+			context.startService(ServiceIntent);
+			
 			new MyNotification(context);
 		}
 
