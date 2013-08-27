@@ -44,4 +44,18 @@ public class GlobalState extends Application {
 		return sharedPref.getBoolean(
 				getString(R.string.bluetooth_connected_key), true);
 	}
+
+	public boolean getPlayState() {
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+		return sharedPref.getBoolean(getString(R.string.play_state_key), true);
+	}
+
+	public void setPlayState(boolean newPlayState) {
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putBoolean(getString(R.string.play_state_key), newPlayState);
+		editor.commit();
+	}
 }

@@ -27,9 +27,10 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 
 		if (currStatus == BluetoothProfile.STATE_DISCONNECTED
 				&& prevStatus == BluetoothProfile.STATE_CONNECTED) {
-			// set remapping status to false
+			// set remapping status
 			appState.setRemap(false);
 			appState.setBluetoothConnected(false);
+			appState.setPlayState(false);
 			new MyNotification(context);
 
 			// turn off blutooth

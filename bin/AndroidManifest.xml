@@ -59,6 +59,10 @@
         <service
             android:name="com.yado.btbut.BtButService"
             android:enabled="true" />
+        
+        <service
+            android:name="com.yado.btbut.TtsService"
+            android:enabled="true" />
 
         <receiver android:name="com.yado.btbut.CallHandler" >
             <intent-filter>

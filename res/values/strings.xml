@@ -6,5 +6,6 @@
 	<string name="preferences_file_key">PreferencesFileKey</string>
 	<string name="button_remapping_key">ButtonRemapping</string>
 	<string name="bluetooth_connected_key">BluetoothConnected</string>
+	<string name="play_state_key">PlayState</string>
 	<item type="integer" name="mId">1423</item>
 </resources>

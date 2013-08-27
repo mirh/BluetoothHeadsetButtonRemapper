@@ -44,6 +44,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int bluetooth_connected_key=0x7f050004;
         public static final int button_remapping_key=0x7f050003;
+        public static final int play_state_key=0x7f050005;
         public static final int preferences_file_key=0x7f050002;
     }
     public static final class style {
@@ -73,5 +74,6 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int Invisible=0x7f070002;
     }
 }
