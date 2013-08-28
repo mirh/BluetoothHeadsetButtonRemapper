@@ -58,4 +58,18 @@ public class GlobalState extends Application {
 		editor.putBoolean(getString(R.string.play_state_key), newPlayState);
 		editor.commit();
 	}
+	
+	public boolean getTtsInit() {
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+		return sharedPref.getBoolean(getString(R.string.tts_init_key), true);
+	}
+
+	public void setTtsInit(boolean newTtsInit) {
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putBoolean(getString(R.string.tts_init_key), newTtsInit);
+		editor.commit();
+	}
 }

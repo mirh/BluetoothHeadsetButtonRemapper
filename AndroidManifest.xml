@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="GlobalState"
@@ -59,7 +60,6 @@
         <service
             android:name="com.yado.btbut.BtButService"
             android:enabled="true" />
-        
         <service
             android:name="com.yado.btbut.TtsService"
             android:enabled="true" />
@@ -74,6 +74,7 @@
         <receiver android:name="com.yado.btbut.BluetoothStateChangeHandler" >
             <intent-filter>
                 <action android:name="android.bluetooth.a2dp.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
     </application>

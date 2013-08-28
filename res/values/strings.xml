@@ -7,5 +7,8 @@
 	<string name="button_remapping_key">ButtonRemapping</string>
 	<string name="bluetooth_connected_key">BluetoothConnected</string>
 	<string name="play_state_key">PlayState</string>
+	<string name="tts_init_key">TtsInit</string>
 	<item type="integer" name="mId">1423</item>
+	
+	<string name="remapping_active_text">Remapping active!</string>
 </resources>

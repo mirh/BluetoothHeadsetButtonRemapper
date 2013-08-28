@@ -13,8 +13,6 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		int currStatus = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -1);
-		int prevStatus = intent.getIntExtra(
-				BluetoothProfile.EXTRA_PREVIOUS_STATE, -1);
 
 		GlobalState appState = ((GlobalState) context.getApplicationContext());
 
@@ -27,12 +25,11 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			Intent ServiceIntent = new Intent(context, TtsService.class);
 			ServiceIntent.putExtra("todo", "startup");
 			context.startService(ServiceIntent);
-			
+
 			new MyNotification(context);
 		}
 
-		if (currStatus == BluetoothProfile.STATE_DISCONNECTED
-				&& prevStatus == BluetoothProfile.STATE_CONNECTED) {
+		if (currStatus == BluetoothProfile.STATE_DISCONNECTED || currStatus == BluetoothProfile.STATE_DISCONNECTING) {
 			// set remapping status
 			appState.setRemap(false);
 			appState.setBluetoothConnected(false);

@@ -46,6 +46,8 @@ public final class R {
         public static final int button_remapping_key=0x7f050003;
         public static final int play_state_key=0x7f050005;
         public static final int preferences_file_key=0x7f050002;
+        public static final int remapping_active_text=0x7f050007;
+        public static final int tts_init_key=0x7f050006;
     }
     public static final class style {
         /** 
