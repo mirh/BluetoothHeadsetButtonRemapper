@@ -1,6 +1,7 @@
 package com.yado.btbut;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,15 +10,20 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.widget.Toast;
 
-public class TtsService extends IntentService implements OnInitListener {
+public class TtsService extends IntentService implements OnInitListener, MediaPlayer.OnCompletionListener {
 
 	private String todoTTS;
+	private String queue;
+	private MediaPlayer mediaPlayer;
+	private String destDirName = Environment.getExternalStorageDirectory().getPath() + "/Android/data/com.yado.btbut/";
 
 	public TtsService() {
 		super("TtsService");
@@ -30,7 +36,27 @@ public class TtsService extends IntentService implements OnInitListener {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		String todo = intent.getStringExtra("todo");
 		todoTTS = todo;
-		myTTS = new TextToSpeech(this, this); // this gives an error if called
+		
+		String destFileName = "remapping_active.wav";
+		
+		if (todoTTS.equals("time")) {
+			Calendar cal = Calendar.getInstance();
+			int minute = cal.get(Calendar.MINUTE);
+			int hourofday = cal.get(Calendar.HOUR_OF_DAY);
+			// http://forum.wordreference.com/showthread.php?t=1666181
+			String tospeak = "It's " + Integer.toString(hourofday) + " "
+					+ Integer.toString(minute) + ".";
+			
+			mediaPlayer = MediaPlayer.create(this, Uri.parse(destDirName + Integer.toString(hourofday) + ".wav"));
+			mediaPlayer.setOnCompletionListener(this);
+			mediaPlayer.start();
+			queue = Integer.toString(minute);
+		} else if (todoTTS.equals("startup")) {
+			mediaPlayer = MediaPlayer.create(this, Uri.parse(destDirName + destFileName));
+			mediaPlayer.start(); // no need to call prepare(); create() does that for you
+		}
+		
+		// myTTS = new TextToSpeech(this, this); // this gives an error if called
 												// in onHandleIntent...
 		return Service.START_NOT_STICKY;
 	}
@@ -128,5 +154,28 @@ public class TtsService extends IntentService implements OnInitListener {
 	public void onDestroy() {
 		myTTS.shutdown();
 		super.onDestroy();
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		mediaPlayer.reset();
+        try {
+			mediaPlayer.setDataSource(this, Uri.parse(destDirName + queue + ".wav"));
+			mediaPlayer.prepare();
+			mediaPlayer.start();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		queue = "";
 	}
 }
