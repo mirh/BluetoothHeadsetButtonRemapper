@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="GlobalState"
@@ -39,14 +38,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.yado.btbut.MainHandlerActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="com.yado.btbut.VoiceCommandActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
@@ -57,6 +48,9 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name="com.yado.btbut.MainHandlerService"
+            android:enabled="true" />
         <service
             android:name="com.yado.btbut.BtButService"
             android:enabled="true" />

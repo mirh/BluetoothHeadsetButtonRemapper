@@ -15,10 +15,9 @@ public class VoiceCommandActivity extends Activity {
 		
 		if (remap) {
 			// start button event handling activity
-			Intent iMainHandler = new Intent(this, MainHandlerActivity.class);
-			iMainHandler.putExtra("todo", "VoiceCommandHandle");
-			iMainHandler.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(iMainHandler);
+			Intent ServiceIntent = new Intent(this, MainHandlerService.class);
+			ServiceIntent.putExtra("todo", "VoiceCommandHandle");
+			startService(ServiceIntent);
 		}
 		else
 		{

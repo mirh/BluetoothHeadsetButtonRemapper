@@ -16,10 +16,9 @@ public class CallHandler extends BroadcastReceiver {
 
 		if (remap) {
 			// start button event handling activity
-			Intent iMainHandler = new Intent(context, MainHandlerActivity.class);
-			iMainHandler.putExtra("todo", "CallHandle");
-			iMainHandler.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			context.startActivity(iMainHandler);
+			Intent ServiceIntent = new Intent(context, MainHandlerService.class);
+			ServiceIntent.putExtra("todo", "CallHandle");
+			context.startService(ServiceIntent);
 			
 			// cancel the call broadcast
 			setResultData(null);

@@ -2,32 +2,36 @@ package com.yado.btbut;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Service;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.WindowManager;
 
-public class MainHandlerActivity extends Activity {
+public class MainHandlerService extends IntentService {
+
+	public MainHandlerService() {
+		super("MainHandlerService");
+		// TODO Auto-generated constructor stub
+	}
 
 	// TTS object
 	Boolean SmAuBPactive;
 	int todoPlayer;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public int onStartCommand(Intent intent, int flags, int startId) {
 		// http://derekknox.com/daklab/2012/04/18/tutorial-how-to-create-invisible-apps-in-android/
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE); // click
-																				// through-able
+		// this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+		// // click
+		// through-able
 
 		// show notification
 		new MyNotification(this);
 
 		// get todo action
-		String todo = getIntent().getStringExtra("todo");
+		String todo = intent.getStringExtra("todo");
 
 		// get remapping state
 		GlobalState appState = ((GlobalState) this.getApplicationContext());
@@ -44,14 +48,12 @@ public class MainHandlerActivity extends Activity {
 				List<RunningAppProcessInfo> pkgAppsList = activityManager
 						.getRunningAppProcesses();
 				/*
-				SmAuBPactive = false;
-				for (int i = 0; i < pkgAppsList.size(); i++) {
-					if (pkgAppsList.get(i).processName.equals(packageToControl)) {
-						if (pkgAppsList.get(i).importance == RunningAppProcessInfo.IMPORTANCE_VISIBLE) {
-							SmAuBPactive = true;
-						}
-					}
-				}
+				 * SmAuBPactive = false; for (int i = 0; i < pkgAppsList.size();
+				 * i++) { if
+				 * (pkgAppsList.get(i).processName.equals(packageToControl)) {
+				 * if (pkgAppsList.get(i).importance ==
+				 * RunningAppProcessInfo.IMPORTANCE_VISIBLE) { SmAuBPactive =
+				 * true; } } }
 				 */
 				/*
 				 * for (int i = 0; i < pkgAppsList.size(); i++) { if
@@ -135,6 +137,11 @@ public class MainHandlerActivity extends Activity {
 				this.sendBroadcast(i, null);
 			}
 		}
-		finish();
+		return Service.START_NOT_STICKY;
+	}
+
+	@Override
+	protected void onHandleIntent(Intent intent) {
+
 	}
 }
