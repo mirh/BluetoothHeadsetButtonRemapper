@@ -72,7 +72,7 @@ public class MainHandlerService extends IntentService {
 					startService(ServiceIntent);
 				} else {
 					// 3xprevious Smart AudioBook Player
-					for (int ii = 0; ii < 3; ii++) {
+					for (int ii = 0; ii < 1; ii++) {
 						Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
 						if (!packageToControl.equals("")) {
 							i.setPackage(packageToControl);

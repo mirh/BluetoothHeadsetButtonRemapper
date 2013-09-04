@@ -13,6 +13,8 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		int currStatus = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -1);
+		int prevStatus = intent.getIntExtra(
+				BluetoothProfile.EXTRA_PREVIOUS_STATE, -1);
 
 		GlobalState appState = ((GlobalState) context.getApplicationContext());
 
@@ -29,7 +31,11 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			new MyNotification(context);
 		}
 
-		if (currStatus == BluetoothProfile.STATE_DISCONNECTED || currStatus == BluetoothProfile.STATE_DISCONNECTING) {
+		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
+				.getDefaultAdapter();
+		if ((currStatus == BluetoothProfile.STATE_DISCONNECTED && prevStatus == BluetoothProfile.STATE_CONNECTED)
+				|| currStatus == BluetoothProfile.STATE_DISCONNECTING
+				|| !mBluetoothAdapter.isEnabled()) {
 			// set remapping status
 			appState.setRemap(false);
 			appState.setBluetoothConnected(false);
@@ -37,8 +43,6 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			new MyNotification(context);
 
 			// turn off blutooth
-			BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
-					.getDefaultAdapter();
 			if (mBluetoothAdapter.isEnabled()) {
 				mBluetoothAdapter.disable();
 			}
