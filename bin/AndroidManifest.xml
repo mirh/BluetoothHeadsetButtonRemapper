@@ -71,6 +71,19 @@
                 <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name="com.yado.btbut.MyAdmin"
+            android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/policies" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
