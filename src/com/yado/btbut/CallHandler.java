@@ -2,16 +2,11 @@ package com.yado.btbut;
 
 // http://android-developers.blogspot.de/2013/05/handling-phone-call-requests-right-way.html
 
-import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
 public class CallHandler extends BroadcastReceiver {
-
-	DevicePolicyManager deviceManger;
-	ComponentName compName;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -20,21 +15,13 @@ public class CallHandler extends BroadcastReceiver {
 		boolean remap = appState.getRemap();
 
 		if (remap) {
-			deviceManger = (DevicePolicyManager) context
-					.getSystemService(Context.DEVICE_POLICY_SERVICE);
-			compName = new ComponentName(context, MyAdmin.class);
-			boolean active = deviceManger.isAdminActive(compName);
-			
-
 			// start button event handling activity
 			Intent ServiceIntent = new Intent(context, MainHandlerService.class);
 			ServiceIntent.putExtra("todo", "CallHandle");
 			context.startService(ServiceIntent);
 
 			this.abortBroadcast();
-			if (active) {
-//				deviceManger.lockNow();
-			}
+
 			// cancel the call broadcast
 			setResultData(null);
 		}

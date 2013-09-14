@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BluetoothStateChangeHandler extends BroadcastReceiver {
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		int currStatus = intent.getIntExtra(BluetoothProfile.EXTRA_STATE, -1);
@@ -22,7 +23,7 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			// set remapping status to true
 			appState.setRemap(true);
 			appState.setBluetoothConnected(true);
-			
+
 			// notify user over TTS
 			Intent ServiceIntent = new Intent(context, TtsService.class);
 			ServiceIntent.putExtra("todo", "startup");
@@ -41,7 +42,7 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			appState.setBluetoothConnected(false);
 			appState.setPlayState(false);
 			new MyNotification(context);
-
+			
 			// turn off blutooth
 			if (mBluetoothAdapter.isEnabled()) {
 				mBluetoothAdapter.disable();

@@ -5,9 +5,15 @@ import java.util.List;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.admin.DevicePolicyManager;
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 public class MainHandlerService extends IntentService {
 
@@ -19,6 +25,10 @@ public class MainHandlerService extends IntentService {
 	// TTS object
 	Boolean SmAuBPactive;
 	int todoPlayer;
+
+	BroadcastReceiver ScreenStateBroadCast;
+	DevicePolicyManager deviceManger;
+	ComponentName compName;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -41,6 +51,40 @@ public class MainHandlerService extends IntentService {
 			if (todo.equals("CallHandle")) {
 				new MyNotification(this);
 				// http://stackoverflow.com/questions/3907062/action-media-button-does-not-work-on-real-device
+
+				// get screen unlock attempt due to call handler
+				ScreenStateBroadCast = new BroadcastReceiver() {
+					// When Event is published, onReceive method is called
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+							GlobalState appState = ((GlobalState) context
+									.getApplicationContext());
+							appState.setScreenState(true);
+						} else if (intent.getAction().equals(
+								Intent.ACTION_SCREEN_OFF)) {
+							GlobalState appState = ((GlobalState) context
+									.getApplicationContext());
+							appState.setScreenState(false);
+						}
+					}
+				};
+
+				// start receiving screen on off events
+				registerReceiver(ScreenStateBroadCast, new IntentFilter(
+						Intent.ACTION_SCREEN_ON));
+				registerReceiver(ScreenStateBroadCast, new IntentFilter(
+						Intent.ACTION_SCREEN_OFF));
+
+				// check if we are admin to be able to lock screen
+				deviceManger = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+				compName = new ComponentName(this, MyAdmin.class);
+				boolean active = deviceManger.isAdminActive(compName);
+				if (active && !appState.getScreenState()) {
+					deviceManger.lockNow();
+				}
+
+				// unregisterReceiver(ScreenStateBroadCast);
 
 				// http://stackoverflow.com/questions/4212992/how-can-i-check-if-an-app-running-in-android
 				String packageToControl = "ak.alizandro.smartaudiobookplayer";

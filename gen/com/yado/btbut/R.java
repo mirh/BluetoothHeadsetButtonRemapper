@@ -46,10 +46,11 @@ public final class R {
         public static final int button_remapping_key=0x7f060003;
         public static final int play_state_key=0x7f060005;
         public static final int preferences_file_key=0x7f060002;
-        public static final int remapping_active_text=0x7f060009;
-        public static final int sample_device_admin=0x7f060008;
-        public static final int sample_device_admin_description=0x7f060007;
-        public static final int tts_init_key=0x7f060006;
+        public static final int remapping_active_text=0x7f06000a;
+        public static final int sample_device_admin=0x7f060009;
+        public static final int sample_device_admin_description=0x7f060008;
+        public static final int screen_state_key=0x7f060006;
+        public static final int tts_init_key=0x7f060007;
     }
     public static final class style {
         /** 
