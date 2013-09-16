@@ -47,33 +47,6 @@ public class BtButActivity extends Activity {
 					"This is necessary to keep the screen off when handling Bluetooth headset call last number.");
 			startActivityForResult(intent, RESULT_ENABLE);
 		}
-		/*
-		ScreenStateBroadCast = new BroadcastReceiver() {
-			// When Event is published, onReceive method is called
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				// TODO Auto-generated method stub
-				if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-					Toast.makeText(context, "on", Toast.LENGTH_LONG).show();
-					GlobalState appState = ((GlobalState) context
-							.getApplicationContext());
-					appState.setScreenState(true);
-				} else if (intent.getAction().equals(
-						Intent.ACTION_SCREEN_OFF)) {
-					Toast.makeText(context, "off", Toast.LENGTH_LONG).show();
-					GlobalState appState = ((GlobalState) context
-							.getApplicationContext());
-					appState.setScreenState(false);
-				}
-			}
-		};
-		
-		// start receiving screen on off events
-		registerReceiver(ScreenStateBroadCast, new IntentFilter(
-				Intent.ACTION_SCREEN_ON));
-		registerReceiver(ScreenStateBroadCast, new IntentFilter(
-				Intent.ACTION_SCREEN_OFF));
-*/
 		finish();
 	}
 

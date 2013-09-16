@@ -72,4 +72,18 @@ public class GlobalState extends Application {
 		editor.putBoolean(getString(R.string.screen_state_key), newScreenState);
 		editor.commit();
 	}
+	
+	public String getAppToControl() {
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+		return sharedPref.getString(getString(R.string.app_to_control_key), "");
+	}
+
+	public void setAppToControl(String AppToControl) {
+		SharedPreferences sharedPref = getSharedPreferences(
+				getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		editor.putString(getString(R.string.app_to_control_key), AppToControl);
+		editor.commit();
+	}
 }

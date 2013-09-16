@@ -31,9 +31,10 @@ public class RemapToggleActivity extends FragmentActivity implements
 
 	@Override
 	public void onDialogClick(String packageName) {
-		Toast toast;
-		toast = Toast.makeText(this, packageName, Toast.LENGTH_SHORT);
-		toast.show();
+		Toast.makeText(this, "Controlled player set to " + packageName,
+				Toast.LENGTH_SHORT).show();
+		GlobalState appState = ((GlobalState) this.getApplicationContext());
+		appState.setAppToControl(packageName);
 		finish();
 	}
 

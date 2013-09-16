@@ -67,6 +67,7 @@ public class PlayerChooserDialogFragment extends DialogFragment {
 		List<ResolveInfo> pkgAppsList;
 		pkgAppsList = packageManager.queryIntentActivities(intent, 0);
 
+		/*
 		apps = new String[pkgAppsList.size()];
 		for (int i = 0; i < pkgAppsList.size(); i++) {
 			apps[i] = pkgAppsList.get(i).activityInfo.name;
@@ -77,7 +78,14 @@ public class PlayerChooserDialogFragment extends DialogFragment {
 			 * PackageManager.GET_META_DATA)); } catch (NameNotFoundException e)
 			 * { // TODO Auto-generated catch block e.printStackTrace(); }
 			 */
-		}
+		// }
+		
+		apps = new String[5];
+		apps[0] = "ak.alizandro.smartaudiobookplayer";
+		apps[1] = "com.hyperionics.fbreader.plugin.tts_plus";
+		apps[2] = "com.hyperionics.avar";
+		apps[3] = "tunein.player";
+		apps[4] = "com.google.android.music";
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Choose media app to control");

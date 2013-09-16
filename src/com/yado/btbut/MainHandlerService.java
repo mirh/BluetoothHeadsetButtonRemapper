@@ -12,14 +12,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 public class MainHandlerService extends IntentService {
 
 	public MainHandlerService() {
 		super("MainHandlerService");
-		// TODO Auto-generated constructor stub
 	}
 
 	// TTS object
@@ -40,6 +39,31 @@ public class MainHandlerService extends IntentService {
 		// show notification
 		new MyNotification(this);
 
+		// get screen unlock attempt due to call handler
+		ScreenStateBroadCast = new BroadcastReceiver() {
+			// When Event is published, onReceive method is called
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+					Log.w("btBut", "on received");
+					GlobalState appState = ((GlobalState) context
+							.getApplicationContext());
+					appState.setScreenState(true);
+				} else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+					Log.w("btBut", "off received");
+					GlobalState appState = ((GlobalState) context
+							.getApplicationContext());
+					appState.setScreenState(false);
+				}
+			}
+		};
+
+		// start receiving screen on off events
+		registerReceiver(ScreenStateBroadCast, new IntentFilter(
+				Intent.ACTION_SCREEN_ON));
+		registerReceiver(ScreenStateBroadCast, new IntentFilter(
+				Intent.ACTION_SCREEN_OFF));
+
 		// get todo action
 		String todo = intent.getStringExtra("todo");
 
@@ -52,45 +76,17 @@ public class MainHandlerService extends IntentService {
 				new MyNotification(this);
 				// http://stackoverflow.com/questions/3907062/action-media-button-does-not-work-on-real-device
 
-				// get screen unlock attempt due to call handler
-				ScreenStateBroadCast = new BroadcastReceiver() {
-					// When Event is published, onReceive method is called
-					@Override
-					public void onReceive(Context context, Intent intent) {
-						if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-							GlobalState appState = ((GlobalState) context
-									.getApplicationContext());
-							appState.setScreenState(true);
-						} else if (intent.getAction().equals(
-								Intent.ACTION_SCREEN_OFF)) {
-							GlobalState appState = ((GlobalState) context
-									.getApplicationContext());
-							appState.setScreenState(false);
-						}
-					}
-				};
-
-				// start receiving screen on off events
-				registerReceiver(ScreenStateBroadCast, new IntentFilter(
-						Intent.ACTION_SCREEN_ON));
-				registerReceiver(ScreenStateBroadCast, new IntentFilter(
-						Intent.ACTION_SCREEN_OFF));
-
-				// check if we are admin to be able to lock screen
-				deviceManger = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-				compName = new ComponentName(this, MyAdmin.class);
-				boolean active = deviceManger.isAdminActive(compName);
-				if (active && !appState.getScreenState()) {
-					deviceManger.lockNow();
-				}
-
 				// unregisterReceiver(ScreenStateBroadCast);
 
 				// http://stackoverflow.com/questions/4212992/how-can-i-check-if-an-app-running-in-android
+				/*
 				String packageToControl = "ak.alizandro.smartaudiobookplayer";
 				ActivityManager activityManager = (ActivityManager) getSystemService("activity");
 				List<RunningAppProcessInfo> pkgAppsList = activityManager
 						.getRunningAppProcesses();
+				*/
+				String packageToControl = appState.getAppToControl();
+				
 				/*
 				 * SmAuBPactive = false; for (int i = 0; i < pkgAppsList.size();
 				 * i++) { if
@@ -144,11 +140,23 @@ public class MainHandlerService extends IntentService {
 						 */
 					}
 				}
+				// check if we are admin to be able to lock screen
+				deviceManger = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
+				compName = new ComponentName(this, MyAdmin.class);
+				boolean active = deviceManger.isAdminActive(compName);
+				if (active && !appState.getScreenState()) {
+					deviceManger.lockNow();
+					deviceManger.lockNow(); // call it twice, otherwise sometimes the ON receiver is called after the off receiver for some reason...
+					appState.setScreenState(false);
+				}
 			} else if (todo.equals("VoiceCommandHandle")) {
 				// http://stackoverflow.com/questions/4212992/how-can-i-check-if-an-app-running-in-android
 				ActivityManager activityManager = (ActivityManager) getSystemService("activity");
 				List<RunningAppProcessInfo> pkgAppsList = activityManager
 						.getRunningAppProcesses();
+				
+				String packageToControl = appState.getAppToControl();
+				/*
 				String packageToControl = "ak.alizandro.smartaudiobookplayer";
 				for (int i = 0; i < pkgAppsList.size(); i++) {
 					if (pkgAppsList.get(i).processName
@@ -158,6 +166,7 @@ public class MainHandlerService extends IntentService {
 						}
 					}
 				}
+				*/
 
 				Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
 				if (!packageToControl.equals("")) {
@@ -179,6 +188,11 @@ public class MainHandlerService extends IntentService {
 				i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
 						KeyEvent.ACTION_UP, todoPlayer));
 				this.sendBroadcast(i, null);
+			} else if (todo.equals("TtsStartup")) {
+				// notify user over TTS
+				Intent ServiceIntent = new Intent(this, TtsService.class);
+				ServiceIntent.putExtra("todo", "startup");
+				this.startService(ServiceIntent);
 			}
 		}
 		return Service.START_NOT_STICKY;

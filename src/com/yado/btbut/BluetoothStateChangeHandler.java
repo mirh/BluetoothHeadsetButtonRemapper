@@ -25,10 +25,10 @@ public class BluetoothStateChangeHandler extends BroadcastReceiver {
 			appState.setBluetoothConnected(true);
 
 			// notify user over TTS
-			Intent ServiceIntent = new Intent(context, TtsService.class);
-			ServiceIntent.putExtra("todo", "startup");
+			Intent ServiceIntent = new Intent(context, MainHandlerService.class);
+			ServiceIntent.putExtra("todo", "TtsStartup");
 			context.startService(ServiceIntent);
-
+			
 			new MyNotification(context);
 		}
 
