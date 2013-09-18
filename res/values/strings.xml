@@ -8,7 +8,7 @@
 	<string name="bluetooth_connected_key">BluetoothConnected</string>
 	<string name="play_state_key">PlayState</string>
 	<string name="screen_state_key">ScreenState</string>
-	<string name="app_to_control_key">ScreenState</string>
+	<string name="app_to_control_key">AppToControl</string>
 	<string name="tts_init_key">TtsInit</string>
 	<string name="sample_device_admin_description">Bluetooth Button Remapper</string>
 	<string name="sample_device_admin">Bluetooth Button Remapper</string>

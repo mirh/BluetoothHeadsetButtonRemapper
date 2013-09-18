@@ -12,8 +12,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Handler;
+import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 public class MainHandlerService extends IntentService {
 
@@ -24,6 +27,8 @@ public class MainHandlerService extends IntentService {
 	// TTS object
 	Boolean SmAuBPactive;
 	int todoPlayer;
+
+	Intent i;
 
 	BroadcastReceiver ScreenStateBroadCast;
 	DevicePolicyManager deviceManger;
@@ -80,13 +85,14 @@ public class MainHandlerService extends IntentService {
 
 				// http://stackoverflow.com/questions/4212992/how-can-i-check-if-an-app-running-in-android
 				/*
-				String packageToControl = "ak.alizandro.smartaudiobookplayer";
-				ActivityManager activityManager = (ActivityManager) getSystemService("activity");
-				List<RunningAppProcessInfo> pkgAppsList = activityManager
-						.getRunningAppProcesses();
-				*/
+				 * String packageToControl =
+				 * "ak.alizandro.smartaudiobookplayer"; ActivityManager
+				 * activityManager = (ActivityManager)
+				 * getSystemService("activity"); List<RunningAppProcessInfo>
+				 * pkgAppsList = activityManager .getRunningAppProcesses();
+				 */
 				String packageToControl = appState.getAppToControl();
-				
+
 				/*
 				 * SmAuBPactive = false; for (int i = 0; i < pkgAppsList.size();
 				 * i++) { if
@@ -111,33 +117,31 @@ public class MainHandlerService extends IntentService {
 					ServiceIntent.putExtra("todo", "time");
 					startService(ServiceIntent);
 				} else {
-					// 3xprevious Smart AudioBook Player
 					for (int ii = 0; ii < 1; ii++) {
-						Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
+						i = new Intent(Intent.ACTION_MEDIA_BUTTON);
 						if (!packageToControl.equals("")) {
 							i.setPackage(packageToControl);
 						}
 
-						i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
-								KeyEvent.ACTION_DOWN,
-								KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-						this.sendBroadcast(i, null);
+						Handler handler = new Handler();
 
-						i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
-								KeyEvent.ACTION_UP,
-								KeyEvent.KEYCODE_MEDIA_PREVIOUS));
-						this.sendBroadcast(i, null);
-						/*
-						 * http://stackoverflow.com/questions/6756768/turn-off-
-						 * screen -on- android
-						 * http://stackoverflow.com/questions
-						 * /10687535/how-can-i-
-						 * change-the-brightness-of-the-screen
-						 * -in-broadcastreceiver WindowManager.LayoutParams
-						 * params = getWindow().getAttributes();
-						 * params.screenBrightness = 0;
-						 * getWindow().setAttributes(params);
-						 */
+						handler.postDelayed(new Runnable() {
+							public void run() {
+								i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
+										KeyEvent.ACTION_DOWN,
+										KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+								sendBroadcast(i, null);
+							}
+						}, 200);
+
+						handler.postDelayed(new Runnable() {
+							public void run() {
+								i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
+										KeyEvent.ACTION_UP,
+										KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+								sendBroadcast(i, null);
+							}
+						}, 200);
 					}
 				}
 				// check if we are admin to be able to lock screen
@@ -146,7 +150,10 @@ public class MainHandlerService extends IntentService {
 				boolean active = deviceManger.isAdminActive(compName);
 				if (active && !appState.getScreenState()) {
 					deviceManger.lockNow();
-					deviceManger.lockNow(); // call it twice, otherwise sometimes the ON receiver is called after the off receiver for some reason...
+					deviceManger.lockNow(); // call it twice, otherwise
+											// sometimes the ON receiver is
+											// called after the off receiver for
+											// some reason...
 					appState.setScreenState(false);
 				}
 			} else if (todo.equals("VoiceCommandHandle")) {
@@ -154,40 +161,62 @@ public class MainHandlerService extends IntentService {
 				ActivityManager activityManager = (ActivityManager) getSystemService("activity");
 				List<RunningAppProcessInfo> pkgAppsList = activityManager
 						.getRunningAppProcesses();
-				
+
 				String packageToControl = appState.getAppToControl();
-				/*
-				String packageToControl = "ak.alizandro.smartaudiobookplayer";
+
+				boolean found = false;
 				for (int i = 0; i < pkgAppsList.size(); i++) {
-					if (pkgAppsList.get(i).processName
-							.equals("com.hyperionics.fbreader.plugin.tts_plus")) {
-						if (pkgAppsList.get(i).importance == RunningAppProcessInfo.IMPORTANCE_VISIBLE) {
-							packageToControl = "com.hyperionics.fbreader.plugin.tts_plus";
-						}
+					if (pkgAppsList.get(i).processName.equals(packageToControl)) {
+						found = true;
+						// Toast.makeText(this, "no need to start", Toast.LENGTH_LONG).show();
+						/*
+						 * if (pkgAppsList.get(i).importance ==
+						 * RunningAppProcessInfo.IMPORTANCE_VISIBLE) { Intent
+						 * LaunchIntent = getPackageManager()
+						 * .getLaunchIntentForPackage(packageToControl);
+						 * startActivity(LaunchIntent); }
+						 */
 					}
 				}
-				*/
 
-				Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
+				if (!found) {
+					Intent LaunchIntent = getPackageManager()
+							.getLaunchIntentForPackage(packageToControl);
+					startActivity(LaunchIntent);
+				}
+
+				i = new Intent(Intent.ACTION_MEDIA_BUTTON);
 				if (!packageToControl.equals("")) {
 					i.setPackage(packageToControl);
 				}
 
 				if (appState.getPlayState()) {
 					todoPlayer = KeyEvent.KEYCODE_MEDIA_PAUSE;
+					// Toast.makeText(this, "pause", Toast.LENGTH_LONG).show();
 					appState.setPlayState(false);
 				} else {
 					todoPlayer = KeyEvent.KEYCODE_MEDIA_PLAY;
+					// Toast.makeText(this, "play", Toast.LENGTH_LONG).show();
 					appState.setPlayState(true);
 				}
+				Handler handler = new Handler();
 
-				i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
-						KeyEvent.ACTION_DOWN, todoPlayer));
-				this.sendBroadcast(i, null);
+				handler.postDelayed(new Runnable() {
+					public void run() {
+						i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
+								KeyEvent.ACTION_DOWN, todoPlayer));
+						sendBroadcast(i, null);
+					}
+				}, 200);
 
-				i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
-						KeyEvent.ACTION_UP, todoPlayer));
-				this.sendBroadcast(i, null);
+				handler.postDelayed(new Runnable() {
+					public void run() {
+						i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(
+								KeyEvent.ACTION_UP, todoPlayer));
+						sendBroadcast(i, null);
+					}
+				}, 200);
+
 			} else if (todo.equals("TtsStartup")) {
 				// notify user over TTS
 				Intent ServiceIntent = new Intent(this, TtsService.class);

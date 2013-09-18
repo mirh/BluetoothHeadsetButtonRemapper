@@ -25,7 +25,7 @@ public class BtButActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		// startService(new Intent(this, BtButService.class));
 		super.onCreate(savedInstanceState);
-
+		
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 				.getDefaultAdapter();
 		if (!mBluetoothAdapter.isEnabled()) {
